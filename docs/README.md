@@ -1,5 +1,5 @@
 # Magento 2 DevTools - Documentation
 
-All documentation is separated out by individual Panel's in the extension.
+All documentation is separated out by individual panels in the extension.
 
 -   [RequireJS](panels/RequireJS.md)
