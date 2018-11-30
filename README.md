@@ -1,5 +1,7 @@
 # Magento 2 DevTools
 
+[![CircleCI](https://circleci.com/gh/magento/m2-devtools.svg?style=svg)](https://circleci.com/gh/magento/m2-devtools)
+
 An extension for Google Chrome (and [likely Mozilla Firefox](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)) that exposes helpful debugging utilities for Magento 2 front-ends.
 
 [**Documentation**](docs/README.md)
