@@ -1,0 +1,51 @@
+{
+  "name": "m2-devtools",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Helpful in-browser tooling for Magento 2",
+  "license": "SEE LICENSE IN LICENSE",
+  "scripts": {
+    "test": "npm run format:check && npm run license:check && jest",
+    "test:dev": "jest --watch",
+    "build": "webpack",
+    "start": "webpack --watch",
+    "format": "prettier --write 'src/**/*.*' 'extension/**/*' '*.js'",
+    "format:check": "prettier --list-different 'src/**/*.*' 'extension/**/*' '*.js'",
+    "typescript": "tsc",
+    "license:check": "node scripts/licenseHeaderCheck.js"
+  },
+  "keywords": [
+    "magento",
+    "m2"
+  ],
+  "author": "Adobe Inc",
+  "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.1.0",
+    "@types/chrome": "0.0.75",
+    "@types/jest": "^23.3.9",
+    "@types/lodash.difference": "^4.5.4",
+    "@types/lodash.intersection": "^4.4.4",
+    "@types/react": "^16.7.6",
+    "@types/react-dom": "^16.0.9",
+    "array.prototype.flat": "^1.2.1",
+    "babel-loader": "^8.0.4",
+    "css-loader": "^1.0.1",
+    "glob": "^7.1.3",
+    "jest": "^23.6.0",
+    "prettier": "^1.15.2",
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0",
+    "style-loader": "^0.23.1",
+    "ts-jest": "^23.10.4",
+    "typescript": "^3.1.6",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2"
+  },
+  "dependencies": {
+    "lodash.difference": "^4.5.0",
+    "lodash.intersection": "^4.4.0"
+  }
+}

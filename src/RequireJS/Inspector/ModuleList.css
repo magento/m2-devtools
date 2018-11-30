@@ -1,0 +1,50 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+.headerRow {
+    font-size: 0.8em;
+}
+
+.row:nth-child(odd) {
+    background: #efefef;
+}
+
+.wrapper {
+    table-layout: fixed;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.truncateCell {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.inspectBtn {
+    background: none;
+    border: none;
+    color: #404040;
+    font-size: 0.6em;
+    text-align: center;
+    cursor: pointer;
+    float: right;
+    visibility: hidden;
+}
+
+.row:hover .inspectBtn {
+    visibility: visible;
+}
+
+.moduleLink {
+    background: none;
+    border: none;
+    font-size: 0.8em;
+    text-decoration: none;
+    color: #585858;
+}
+
+.td {
+    padding: 4px 0 4px 10px;
+}

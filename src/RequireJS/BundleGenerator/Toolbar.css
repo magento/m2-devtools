@@ -1,0 +1,54 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+.wrapper {
+    background: rgb(243, 243, 243);
+    height: 28px;
+    border-bottom: 1px solid rgb(208, 208, 208);
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 31px;
+    user-select: none;
+}
+
+.recordBtn {
+    background: none;
+    border: none;
+    color: rgb(110, 110, 110);
+    font-size: 17px;
+    height: 100%;
+    margin-left: 7px;
+    margin-right: 5px;
+    height: 21px;
+    cursor: pointer;
+}
+
+.recordBtn[data-recording='true'],
+.recordBtn[data-recording='true']:hover {
+    color: rgb(210, 0, 1);
+}
+
+.clearBtn {
+    background: none;
+    border: none;
+    font-size: 17px;
+    height: 100%;
+    color: rgb(110, 110, 110);
+    font-weight: 600;
+    height: 21px;
+    line-height: 0px;
+    cursor: pointer;
+}
+
+.clearBtn:hover,
+.recordBtn:hover {
+    color: rgb(51, 51, 51);
+}
+
+.clearBtn:focus,
+.recordBtn:focus {
+    outline: none;
+}

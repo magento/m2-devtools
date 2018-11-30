@@ -1,0 +1,8 @@
+{
+    "name": "Magento 2 DevTools",
+    "version": "0.1",
+    "description": "Helpful in-browser tooling for Magento 2",
+    "manifest_version": 2,
+    "permissions": ["activeTab"],
+    "devtools_page": "devtools.html"
+}

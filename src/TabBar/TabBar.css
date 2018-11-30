@@ -1,0 +1,38 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+.wrapper {
+    height: 30px;
+    background: rgb(243, 243, 243);
+    border-bottom: 1px solid rgb(204, 204, 204);
+    position: sticky;
+    top: 0;
+    user-select: none;
+}
+
+.tab {
+    border: none;
+    background: none;
+    padding: 0 16px;
+    height: 100%;
+    cursor: pointer;
+}
+
+.tab[data-selected='true'] {
+    background: #e4e4e4;
+    font-weight: 500;
+}
+
+.tab:focus {
+    outline: none;
+}
+
+.tab:hover {
+    background: rgb(234, 234, 234);
+}
+
+.tab:not(:last-child) {
+    border-right: 1px solid rgb(204, 204, 204);
+}

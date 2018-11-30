@@ -1,0 +1,52 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+.wrapper {
+    height: calc(100% - 62px);
+}
+
+.tileWrapper {
+    flex-basis: 290px;
+    text-align: center;
+    border: 1px solid #616161;
+    background: rgb(199, 210, 228);
+    height: 100px;
+    margin: 2%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pageType {
+    font-size: 1.8em;
+    color: black;
+    margin-bottom: 8px;
+}
+
+.pageList {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    align-items: center;
+    align-content: center;
+    height: 100%;
+    padding-left: 0;
+    margin: 0;
+    overflow-x: scroll;
+}
+
+.tileDataLabel {
+    font-weight: 600;
+}
+
+.tileDataValue[data-value-type='url'] {
+    font-style: italic;
+}
+
+.tileDataValue a {
+    text-decoration: none;
+    color: #000;
+}

@@ -1,0 +1,51 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+.centeredCopy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 60px);
+    text-align: center;
+}
+
+.centeredCopy p {
+    margin: 0;
+    font-size: 13px;
+    color: rgb(119, 119, 119);
+    margin-bottom: 12px;
+}
+
+.recordBtn {
+    background: rgb(243, 243, 243);
+    border: 1px solid rgb(204, 204, 204);
+    color: rgb(110, 110, 110);
+    font-size: 17px;
+    height: 100%;
+    margin-left: 7px;
+    margin-right: 5px;
+    height: 24px;
+}
+
+.recordBtn:focus,
+.clearBtn:focus {
+    outline: none;
+}
+
+.recording {
+    color: rgb(192, 41, 28);
+}
+
+.clearBtn {
+    background: rgb(243, 243, 243);
+    border: 1px solid rgb(204, 204, 204);
+    font-size: 17px;
+    height: 100%;
+    color: rgb(110, 110, 110);
+    font-weight: 600;
+    height: 24px;
+    line-height: 0px;
+}
