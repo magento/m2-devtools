@@ -6,6 +6,12 @@ An extension for Google Chrome (and [likely Mozilla Firefox](https://developer.m
 
 [**Documentation**](docs/README.md)
 
+## Usage
+
+Whenever you navigate to a page running Magento 2, a new tab should appear in DevTools from this extension.
+
+<p align="center"><img src="screenshot.png" /></p>
+
 ## In-Progress Features
 
 -   [RequireJS Optimizer](https://requirejs.org/docs/optimization.html) configuration generator (including Magento module for quick install)
