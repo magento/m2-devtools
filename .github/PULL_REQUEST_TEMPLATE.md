@@ -1,11 +1,11 @@
 ## This PR is a:
 
-[ ] New feature
-[ ] Enhancement/Optimization
-[ ] Refactor
-[ ] Bugfix
-[ ] Test for existing code
-[ ] Documentation
+- [ ] New feature
+- [ ] Enhancement/Optimization
+- [ ] Refactor
+- [ ] Bugfix
+- [ ] Test for existing code
+- [ ] Documentation
 
 ## Summary
 
