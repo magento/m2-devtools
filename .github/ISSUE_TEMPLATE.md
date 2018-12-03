@@ -1,9 +1,9 @@
 ## This issue is a:
 
-[ ] Bug
-[ ] Feature suggestion
-[ ] Documentation issue
-[ ] Other (Please Specify)
+- [ ] Bug
+- [ ] Feature suggestion
+- [ ] Documentation issue
+- [ ] Other (Please Specify)
 
 ### Environment
 
