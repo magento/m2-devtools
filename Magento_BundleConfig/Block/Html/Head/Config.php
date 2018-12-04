@@ -7,7 +7,9 @@
 namespace Magento\BundleConfig\Block\Html\Head;
 
 use Magento\Framework\RequireJs\Config as RequireJsConfig;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\View\Asset\Minification;
+
 
 class Config extends \Magento\Framework\View\Element\AbstractBlock
 {
@@ -15,6 +17,11 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      * @var RequireJsConfig
      */
     private $config;
+
+    /**
+     * @var AppState
+     */
+    private $appState;
 
     /**
      * @var \Magento\RequireJs\Model\FileManager
@@ -34,6 +41,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     /**
      * @param \Magento\Framework\View\Element\Context $context
      * @param RequireJsConfig $config
+     * @param AppState $appState
      * @param \Magento\BundleConfig\Model\FileManager $fileManager
      * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Framework\View\Asset\ConfigInterface $bundleConfig
@@ -42,6 +50,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         RequireJsConfig $config,
+        AppState $appState,
         \Magento\BundleConfig\Model\FileManager $fileManager,
         \Magento\Framework\View\Page\Config $pageConfig,
         \Magento\Framework\View\Asset\ConfigInterface $bundleConfig,
@@ -49,6 +58,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     ) {
         $this->fileManager = $fileManager;
         $this->pageConfig = $pageConfig;
+        $this->appState = $appState;
         parent::__construct($context, $data);
     }
 
@@ -59,6 +69,10 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
+        if ($this->appState->getMode() == AppState::MODE_DEVELOPER) {
+            return parent::_prepareLayout();
+        }
+
         $fullActionName = $this->getRequest()->getFullActionName();
         $assetCollection = $this->pageConfig->getAssetCollection();
         $bundleConfig = $this->fileManager->createJsBundleAsset($fullActionName);
