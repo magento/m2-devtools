@@ -19,7 +19,7 @@ export type RequireModule = {
 };
 
 type BundleConfig = {
-    optimize: 'none';
+    optimize: 'none' | 'uglify2';
     wrapShim: boolean;
     modules: RequireModule[];
     inlineText: boolean;
@@ -115,7 +115,7 @@ export default function generate(
         .reverse();
 
     return {
-        optimize: 'none',
+        optimize: 'uglify2',
         wrapShim: true,
         inlineText: true,
         modules: finalModules,
