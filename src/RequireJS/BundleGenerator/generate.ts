@@ -3,11 +3,7 @@
  * See COPYING.txt for license details.
  */
 
-import {
-    ModulesByPageType,
-    ShimConfig,
-    RequireConfig,
-} from '../../types/require';
+import { ShimConfig, RequireConfig, PageModule } from '../../types/require';
 import intersection from 'lodash.intersection';
 import difference from 'lodash.difference';
 
@@ -35,13 +31,11 @@ type BundleConfig = {
 };
 
 export default function generate(
-    modulesByPageType: ModulesByPageType,
+    pageModules: PageModule[],
     requireConfig: RequireConfig,
 ): BundleConfig {
     // Cheap clone so we can feel free to mutate
-    const modules = JSON.parse(
-        JSON.stringify(modulesByPageType),
-    ) as ModulesByPageType;
+    const modules = JSON.parse(JSON.stringify(pageModules)) as PageModule[];
 
     const commons: string[] = [];
     modules.forEach(mod => {

@@ -46,6 +46,7 @@ export default class RequireJS extends React.Component<{}, State> {
                 />
                 {tabs.map(tab => (
                     <div
+                        key={tab.name}
                         className={styles.tabWrapper}
                         data-selected={tab === selectedTab}
                     >

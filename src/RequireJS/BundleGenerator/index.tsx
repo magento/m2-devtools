@@ -8,43 +8,31 @@ import Toolbar from './Toolbar';
 import ConfigGen from './ConfigGen';
 import styles from './BundleGenerator.css';
 import c from '../../classjoin';
-import {
-    getLoadedModules,
-    getRequireConfig,
-    getPageConfigType,
-    getURL,
-} from '../../interop';
-import { ModulesByPageType, RequireConfig } from '../../types/require';
+import { RequireConfig, PageModule } from '../../types/require';
 import RecordingProgress from './RecordingProgress';
+import PageCollector from './PageCollector';
 
 type States = 'RECORDING' | 'RESULTS' | 'WELCOME';
 type State = {
     currentState: States;
-    modulesByPageType: ModulesByPageType;
+    modulesByURL: { [key: string]: PageModule };
     requireConfig: RequireConfig | null;
 };
 
-// TODO:
-// - Merge modules from multiple URLs with same layout handle, instead of taking the latest
-//      - Track URLs, leave comments in `r.js` generated config
-// - Allow purging records for a visited URL. IOW, if you've visited 4 product pages, but
-//   want to purge the results from 1 of them
-// - Support a user provided list of URLs to drive the browser too, instead of manual nav
-//   for frequent users
 export default class BundleGenerator extends React.Component<{}, State> {
     state: State = {
-        modulesByPageType: [],
+        modulesByURL: {},
         currentState: 'WELCOME',
         requireConfig: null,
     };
-    timerID: number | null = null;
+    collector: PageCollector = new PageCollector();
 
     onRecord = () => {
         this.setState(({ currentState }) => {
-            const isStop = currentState === 'RECORDING';
-            isStop ? this.stopPolling() : this.pollForModules();
+            const shouldStopRecording = currentState === 'RECORDING';
+            shouldStopRecording ? this.stopPolling() : this.pollForModules();
             return {
-                currentState: isStop ? 'RESULTS' : 'RECORDING',
+                currentState: shouldStopRecording ? 'RESULTS' : 'RECORDING',
             };
         });
     };
@@ -52,67 +40,28 @@ export default class BundleGenerator extends React.Component<{}, State> {
     onClear = () => {
         this.setState({
             currentState: 'WELCOME',
-            modulesByPageType: [],
+            modulesByURL: {},
             requireConfig: null,
         });
     };
 
     stopPolling() {
-        this.timerID && window.clearTimeout(this.timerID);
+        this.collector.unsubscribe(this.collectorCallback);
     }
 
-    // TODO: Abstract the body of this method outside of the component
-    // and test it. Also clean it up because it's a mess
+    collectorCallback = (data: { page: PageModule; config: RequireConfig }) => {
+        const { page, config } = data;
+        this.setState(prevState => ({
+            modulesByURL: {
+                ...prevState.modulesByURL,
+                [page.url]: page,
+            },
+            requireConfig: config,
+        }));
+    };
+
     pollForModules() {
-        this.timerID = window.setTimeout(async () => {
-            try {
-                const [
-                    modules,
-                    requireConfig,
-                    pageConfigType,
-                    url,
-                ] = await Promise.all([
-                    getLoadedModules(),
-                    getRequireConfig(),
-                    getPageConfigType(),
-                    getURL(),
-                ]);
-
-                // TODO: Actually handle this case, since it will point to a bug
-                // in the shaky logic of `_getPageConfigType` in `interop.ts`
-                if (!pageConfigType) throw new Error('No pageConfigType found');
-
-                this.setState(({ modulesByPageType }) => {
-                    const [current] = modulesByPageType.filter(
-                        m => m.pageConfigType === pageConfigType,
-                    );
-                    const mod = {
-                        url,
-                        pageConfigType,
-                        // TODO: Address this hack better. m2 has a bug where
-                        // a superfluous mixin is added to the Require registry for any
-                        // require() with a relative URL (./).
-                        modules: modules.filter(m => !m.startsWith('mixins!')),
-                    };
-                    current
-                        ? modulesByPageType.splice(
-                              modulesByPageType.indexOf(current),
-                              1,
-                              mod,
-                          )
-                        : modulesByPageType.push(mod);
-
-                    return {
-                        requireConfig,
-                        modulesByPageType,
-                    };
-                });
-            } catch (err) {
-                console.error('Failure in pollForModules()', err);
-            }
-
-            this.pollForModules();
-        }, 200);
+        this.collector.subscribe(this.collectorCallback);
     }
 
     componentWillUnmount() {
@@ -120,7 +69,7 @@ export default class BundleGenerator extends React.Component<{}, State> {
     }
 
     render() {
-        const { currentState, modulesByPageType, requireConfig } = this.state;
+        const { currentState, modulesByURL, requireConfig } = this.state;
 
         return (
             <>
@@ -131,11 +80,11 @@ export default class BundleGenerator extends React.Component<{}, State> {
                 />
                 {currentState === 'WELCOME' && welcomeContent}
                 {currentState === 'RECORDING' && (
-                    <RecordingProgress modulesByPageType={modulesByPageType} />
+                    <RecordingProgress modulesByURL={modulesByURL} />
                 )}
                 {currentState === 'RESULTS' && requireConfig && (
                     <ConfigGen
-                        modulesByPageType={modulesByPageType}
+                        pageModules={Object.values(modulesByURL)}
                         requireConfig={requireConfig}
                     />
                 )}

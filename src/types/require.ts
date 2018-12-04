@@ -29,7 +29,9 @@ export type PageModule = {
     modules: string[];
 };
 
-export type ModulesByPageType = PageModule[];
+export type ModulesByURL = {
+    [key: string]: PageModule;
+};
 
 export type ShimConfig = {
     [key: string]:
