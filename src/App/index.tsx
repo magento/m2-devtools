@@ -60,6 +60,7 @@ export default class App extends React.Component<{}, State> {
                         // each tab to persist its state without having to hoist
                         // state to the root of the tree
                         <div
+                            key={panel.title}
                             className={styles.rightPanelItemWrapper}
                             data-selected={panel === selectedPanel}
                         >

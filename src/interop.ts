@@ -95,6 +95,16 @@ function _getURL(): string {
 }
 export const getURL = () => evalInPage<string>(_getURL.toString());
 
+export async function getBundlingData() {
+    const [modules, config, pageConfigType, url] = await Promise.all([
+        getLoadedModules(),
+        getRequireConfig(),
+        getPageConfigType(),
+        getURL(),
+    ]);
+    return { modules, config, pageConfigType, url };
+}
+
 function evalInPage<T>(code: string): Promise<T> {
     return new Promise((res, rej) => {
         const wrappedCode = `(${code})()`;

@@ -4,21 +4,21 @@
  */
 
 import * as React from 'react';
-import { ModulesByPageType, PageModule } from '../../types/require';
+import { ModulesByURL, PageModule } from '../../types/require';
 import styles from './RecordingProgress.css';
 
 type Props = {
-    modulesByPageType: ModulesByPageType;
+    modulesByURL: ModulesByURL;
 };
 
 export default class RecordingProgress extends React.Component<Props> {
     render() {
-        const { modulesByPageType } = this.props;
+        const { modulesByURL } = this.props;
 
         return (
             <div className={styles.wrapper}>
                 <ul className={styles.pageList}>
-                    {modulesByPageType.map(mod => (
+                    {Object.values(modulesByURL).map(mod => (
                         <PageTypeTile key={mod.url} mod={mod} />
                     ))}
                 </ul>
