@@ -5,7 +5,7 @@
   "description": "Helpful in-browser tooling for Magento 2",
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
-    "test": "npm run format:check && npm run license:check && jest",
+    "test": "npm run format:check && npm run license:check && tsc && jest",
     "test:dev": "jest --watch",
     "build": "webpack",
     "start": "webpack --watch",

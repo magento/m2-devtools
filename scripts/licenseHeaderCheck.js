@@ -13,7 +13,7 @@ const readFilePromise = promisify(readFile);
 
 (async () => {
     const filePaths = await globPromise('**/*.{js,ts,html}', {
-        ignore: ['node_modules/**/*', 'extension/dist/**/*'],
+        ignore: ['node_modules/**', 'extension/dist/**'],
     });
 
     const missingHeaders = (await Promise.all(
