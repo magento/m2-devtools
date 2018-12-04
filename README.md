@@ -4,6 +4,10 @@
 
 An extension for Google Chrome (and [likely Mozilla Firefox](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)) that exposes helpful debugging utilities for Magento 2 front-ends.
 
+## Early Release
+
+This is a very new project with little to no documentation, published to solicit feedback from early adopters. The extension is currently only available through manual installation of the development build, and will be published to the Chrome Web Store at a future time.
+
 [**Documentation**](docs/README.md)
 
 ## Usage
