@@ -10,18 +10,12 @@ use Magento\Framework\RequireJs\Config as RequireJsConfig;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\View\Asset\Minification;
 
-
 class Config extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
      * @var RequireJsConfig
      */
     private $config;
-
-    /**
-     * @var AppState
-     */
-    private $appState;
 
     /**
      * @var \Magento\RequireJs\Model\FileManager
@@ -54,12 +48,14 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         \Magento\BundleConfig\Model\FileManager $fileManager,
         \Magento\Framework\View\Page\Config $pageConfig,
         \Magento\Framework\View\Asset\ConfigInterface $bundleConfig,
+        \Magento\Framework\Filesystem\DirectoryList $dir,
         array $data = []
     ) {
+        parent::__construct($context, $data);
         $this->fileManager = $fileManager;
         $this->pageConfig = $pageConfig;
         $this->appState = $appState;
-        parent::__construct($context, $data);
+        $this->dir = $dir;
     }
 
     /**
@@ -73,21 +69,34 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
             return parent::_prepareLayout();
         }
 
+        $staticDir = $this->dir->getPath('static');
         $fullActionName = $this->getRequest()->getFullActionName();
+
         $assetCollection = $this->pageConfig->getAssetCollection();
-        $bundleConfig = $this->fileManager->createJsBundleAsset($fullActionName);
-        $assetCollection->insert(
-            $bundleConfig->getFilePath(),
-            $bundleConfig,
-            RequireJsConfig::REQUIRE_JS_FILE_NAME
-        );
 
         $shared = $this->fileManager->createSharedJsBundleAsset();
-        $assetCollection->insert(
-            $shared->getFilePath(),
-            $shared,
-            $bundleConfig->getFilePath()
-        );
+        $sharedBundleRelPath = $shared->getFilePath();
+        $sharedBundleAbsPath = $staticDir . "/" . $sharedBundleRelPath;
+
+        if (file_exists($sharedBundleAbsPath)) {
+            $assetCollection->insert(
+                $sharedBundleRelPath,
+                $shared,
+                RequireJsConfig::REQUIRE_JS_FILE_NAME
+            );
+        }
+
+        $bundleConfig = $this->fileManager->createJsBundleAsset($fullActionName);
+        $pageSpecificBundleRelPath = $bundleConfig->getFilePath();
+        $pageSpecificBundleAbsPath = $staticDir . "/" . $pageSpecificBundleRelPath;
+
+        if (file_exists($pageSpecificBundleAbsPath)) {
+            $assetCollection->insert(
+                $pageSpecificBundleRelPath,
+                $bundleConfig,
+                $sharedBundleRelPath
+            );
+        }
 
         return parent::_prepareLayout();
     }
