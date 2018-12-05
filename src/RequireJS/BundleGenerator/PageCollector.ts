@@ -44,6 +44,7 @@ export default class PageCollector {
                 // TODO: Handle errors. Most common error is us attempting
                 // to eval code in the currently-inspected page when it's
                 // between pages, which can be safely ignored
+                console.error(err);
             }
 
             this.pollForModules();

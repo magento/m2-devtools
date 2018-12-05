@@ -4,7 +4,25 @@
  */
 
 import PageCollector from '../PageCollector';
-import { getBundlingData } from '../../../interop';
+import { getBundlingData as unTyped_getBundlingData } from '../../../interop';
+
+// TypeScript isn't aware of the `jest.mock` call below, so
+// we do a type assertion once here
+const getBundlingData = (unTyped_getBundlingData as any) as jest.MockInstance<
+    typeof unTyped_getBundlingData
+>;
+
+const getMockData = () => ({
+    url: 'https://www.site.com/product',
+    config: {
+        baseUrl: 'http://www.site.com',
+        map: { '*': {} },
+        paths: {},
+        shim: {},
+    },
+    pageConfigType: 'catalog-product-view',
+    modules: ['foo', 'bar'],
+});
 
 jest.mock('../../../interop');
 jest.useFakeTimers();
@@ -15,6 +33,8 @@ beforeEach(() => {
 });
 
 test('Does not start polling until a subscription exists', () => {
+    getBundlingData.mockReturnValueOnce(Promise.resolve(getMockData()));
+
     const collector = new PageCollector();
     jest.runAllTimers();
     expect(getBundlingData).not.toHaveBeenCalled();
@@ -26,28 +46,29 @@ test('Does not start polling until a subscription exists', () => {
     expect(getBundlingData).toHaveBeenCalled();
 });
 
-test('Stops notifying subscriber when it is unsubscribed', () => {
+test('Stops notifying subscriber when it is unsubscribed', async () => {
+    getBundlingData.mockReturnValueOnce(Promise.resolve(getMockData()));
+
     const collector = new PageCollector();
     const subscriber = jest.fn();
     collector.subscribe(subscriber);
-
     jest.runAllTimers();
-    const callCountBeforeUnsubscribe = subscriber.mock.calls.length;
+
+    await 0;
+    expect(subscriber).toHaveBeenCalledTimes(1);
+    subscriber.mockReset();
+
     collector.unsubscribe(subscriber);
     jest.runAllTimers();
 
-    expect(subscriber).toHaveBeenCalledTimes(callCountBeforeUnsubscribe);
+    await 0;
+    expect(subscriber).not.toHaveBeenCalled();
 });
 
-test('Removes modules that are prepended with "mixins!"', () => {
-    const mock = (getBundlingData as unknown) as jest.MockInstance<
-        typeof getBundlingData
-    >;
-    mock.mockReturnValue(
+test('Removes modules that are prepended with "mixins!"', async () => {
+    getBundlingData.mockReturnValueOnce(
         Promise.resolve({
-            url: 'https://www.site.com/product',
-            config: {},
-            pageConfigType: 'catalog-product-view',
+            ...getMockData(),
             modules: ['foo', 'bar', 'mixins!bar', 'bizz'],
         }),
     );
@@ -58,10 +79,8 @@ test('Removes modules that are prepended with "mixins!"', () => {
 
     jest.runAllTimers();
 
-    // Unlike tests using the `jest.mock` automock functionality,
-    // we need to wait briefly here because the Promise passed to `mock.mockReturnValue`
-    // above uses a microtask to unwrap
-    setImmediate(() => {
-        expect(subscriber).toHaveBeenCalledTimes(1);
-    });
+    await 0;
+    expect(subscriber).toHaveBeenCalledTimes(1);
+    const [[firstData]] = subscriber.mock.calls;
+    expect(firstData.page.modules).toEqual(['foo', 'bar', 'bizz']);
 });
