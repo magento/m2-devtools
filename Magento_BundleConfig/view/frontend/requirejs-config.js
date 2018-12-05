@@ -4,5 +4,5 @@
  */
 
 var config = {
-    deps: ['jquery/jquery.cookie'],
+    deps: ['jquery/jquery.cookie']
 };
