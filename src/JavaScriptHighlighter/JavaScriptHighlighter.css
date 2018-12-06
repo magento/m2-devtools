@@ -1,0 +1,57 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+.wrapper {
+    height: 100%;
+    width: 100%;
+    background: #191818;
+    position: relative;
+}
+
+:global(.js-highlight) {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+}
+
+:global(.js-highlight .expression-statement) {
+    color: #fff;
+}
+
+:global(.js-highlight .program) {
+    font-size: 1.3em;
+    color: #fff;
+}
+
+:global(.js-highlight .program:first-child) {
+    color: #6aa220;
+}
+
+:global(.js-highlight .object-expression) {
+    color: #fff;
+}
+
+:global(.js-highlight .property > .literal:first-child) {
+    color: #9595d4;
+}
+
+:global(.js-highlight .literal),
+:global(.js-highlight .array-expression) {
+    color: #de9334;
+}
+
+.copyBtn {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    background: none;
+    color: white;
+    font-size: 1.4vw;
+    border: 1px solid #6d6d6d;
+}
+
+.copyBtn:hover {
+    background: #afabab;
+}

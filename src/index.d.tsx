@@ -7,3 +7,8 @@ declare module '*.css' {
     const content: { [className: string]: string };
     export default content;
 }
+
+declare module 'highlight-javascript-syntax' {
+    const fn: (code: string) => string;
+    export = fn;
+}
