@@ -1,0 +1,11 @@
+.codeView {
+    height: calc(100% - 65px);
+    width: 50%;
+    font-size: 0.8vw;
+    padding-top: 5px;
+    padding-left: 7px;
+}
+
+.codeView :global(.js-highlight) {
+    overflow-x: scroll;
+}
