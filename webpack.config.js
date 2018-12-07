@@ -37,6 +37,11 @@ module.exports = {
                     },
                 ],
             },
+            {
+                test: /\.md$/,
+                include: join(__dirname, 'docs'),
+                use: ['html-loader', 'markdown-loader'],
+            },
         ],
     },
 };

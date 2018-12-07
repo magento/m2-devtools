@@ -16,6 +16,7 @@ export type RequireModule = {
 
 type BundleConfig = {
     optimize: 'none' | 'uglify2';
+    generateSourceMaps: boolean;
     wrapShim: boolean;
     modules: RequireModule[];
     inlineText: boolean;
@@ -97,11 +98,11 @@ export default function generate(
         .filter(mod => mod.modules.length)
         .map(mod => ({
             name: `bundles/${mod.pageConfigType}`,
+            create: true,
             include: mod.modules,
             // Exclude any modules that are already
             // found in the shared bundle
             exclude: ['bundles/shared'],
-            create: true,
         }))
         .concat([sharedModules])
         // Shared module needs to be first. If they are not,
@@ -110,6 +111,7 @@ export default function generate(
 
     return {
         optimize: 'uglify2',
+        generateSourceMaps: true,
         wrapShim: true,
         inlineText: true,
         modules: finalModules,

@@ -36,8 +36,6 @@ class FileManager
         // TODO: Just generate paths with underscores in the Chrome extension
         $formattedActionName = str_replace("_", "-", $fullActionName);
         $relPath = $this->staticContext->getConfigPath() . '/bundles/' . $formattedActionName . '.js';
-        // TODO: Find a way to silently bail when file does not exist. Not all action's
-        // handles will have an associated JS bundle
         return $this->assetRepo->createArbitrary($relPath, '');
     }
 
