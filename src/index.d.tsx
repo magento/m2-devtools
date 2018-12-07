@@ -12,3 +12,8 @@ declare module 'highlight-javascript-syntax' {
     const fn: (code: string) => string;
     export = fn;
 }
+
+declare module '*.md' {
+    const content: string;
+    export default content;
+}

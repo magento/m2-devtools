@@ -25,11 +25,8 @@
     color: #fff;
 }
 
-:global(.js-highlight .program:first-child) {
-    color: #6aa220;
-}
-
-:global(.js-highlight .object-expression) {
+:global(.js-highlight .object-expression),
+:global(.js-highlight .array-expression) {
     color: #fff;
 }
 
@@ -37,14 +34,17 @@
     color: #9595d4;
 }
 
-:global(.js-highlight .literal),
-:global(.js-highlight .array-expression) {
+:global(.js-highlight .literal) {
     color: #de9334;
+}
+
+:global(.js-highlight .comment) {
+    color: #6aa220;
 }
 
 .copyBtn {
     position: absolute;
-    top: 12px;
+    bottom: 12px;
     right: 14px;
     background: none;
     color: white;
@@ -54,4 +54,8 @@
 
 .copyBtn:hover {
     background: #afabab;
+}
+
+:global(.js-highlight .literal.boolean) {
+    color: #4be8da;
 }

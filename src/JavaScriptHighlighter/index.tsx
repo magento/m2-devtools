@@ -19,8 +19,16 @@ export default class JavaScriptHighlighter extends React.PureComponent<
     {}
 > {
     getHTML() {
+        const markup = highlightJavaScript(this.props.code)
+            // Hack to wrap single-line comments in their own span tags
+            .replace(/(\/\/.+)/g, '<span class="comment">$1</span>')
+            // Hack to differentiate boolean literals
+            .replace(
+                /<span class="literal">(true|false)<\/span>/g,
+                '<span class="literal boolean">$1</span>',
+            );
         return {
-            __html: highlightJavaScript(this.props.code),
+            __html: markup,
         };
     }
 
