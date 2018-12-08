@@ -153,3 +153,37 @@ test('Provided paths and map* are included in generated config', () => {
     expect(paths.testFoo).toBe('test/foo');
     expect(map['*'].testBar).toBe('test/bar');
 });
+
+test('Correctly merges > 1 results for same layout handle', () => {
+    const modulesByPageType = [
+        {
+            url: 'http://www.site.com/product1',
+            pageConfigType: 'catalog-product-view',
+            modules: [
+                'product/common',
+                'product/common2',
+                'common/foo',
+                'product/unique',
+            ],
+        },
+        {
+            url: 'http://www.site.com/product2',
+            pageConfigType: 'catalog-product-view',
+            modules: ['product/common', 'product/common2', 'common/foo'],
+        },
+        {
+            url: 'http://www.site.com/',
+            pageConfigType: 'cms-index-index',
+            modules: ['common/foo'],
+        },
+    ];
+    const { modules } = generate(modulesByPageType, sampleRequireConfig);
+    const byName = modulesByName(modules);
+
+    expect(byName['bundles/shared'].include).toEqual(['common/foo']);
+    expect(byName['bundles/catalog-product-view'].include).toEqual([
+        'product/common',
+        'product/common2',
+        'product/unique',
+    ]);
+});

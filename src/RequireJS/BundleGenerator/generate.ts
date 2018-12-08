@@ -4,8 +4,7 @@
  */
 
 import { ShimConfig, RequireConfig, PageModule } from '../../types/require';
-import intersection from 'lodash.intersection';
-import difference from 'lodash.difference';
+import splitter from '../../splitter';
 
 export type RequireModule = {
     name: string;
@@ -35,54 +34,22 @@ export default function generate(
     pageModules: PageModule[],
     requireConfig: RequireConfig,
 ): BundleConfig {
-    // Cheap clone so we can feel free to mutate
-    const modules = JSON.parse(JSON.stringify(pageModules)) as PageModule[];
-
-    const commons: string[] = [];
-    modules.forEach(mod => {
-        // Flatten all other page's modules into
-        // a flat list
-        const otherPages = modules
-            .map(m => m.modules)
-            .filter(m => m !== mod.modules)
-            .flat();
-        // Find all the module's common between this page and at
-        // least 1 other page
-        const modCommons = intersection(mod.modules, otherPages);
-        commons.push(...modCommons);
-        // Find all modules only used on this page
-        mod.modules = difference(mod.modules, commons);
-    });
-
-    // Set any URL in `paths` and `map` to `empty:` to prevent r.js from blowing up.
-    // `requirejs-config.js` in m2 at runtime will set the correct path
-    const config = JSON.parse(JSON.stringify(requireConfig)) as RequireConfig;
-    Object.entries(config.paths).forEach(([path, location]) => {
-        if (/^https?:\//.test(location)) {
-            config.paths[path] = 'empty:';
-        }
-    });
-    const mapStar = config.map['*'];
-    Object.entries(mapStar).forEach(([path, location]) => {
-        if (/^https?:\//.test(location)) {
-            mapStar[path] = 'empty:';
-        }
-    });
-
-    // The RequireJS config scraped from the storefront has an
-    // unnecessary key 'exportsFn' for some modules, and 'exportsFn'
-    // will cause `r.js` to blow up. Removing the key
-    Object.entries(config.shim).forEach(([key, conf]) => {
-        if (!conf.hasOwnProperty('exportsFn')) return;
-        // @ts-ignore: Type narrowing isn't working well here, and type guards
-        // are bulky
-        config.shim[key] = { exports: conf.exports };
-    });
+    const splitByPageType = pageModules.reduce(
+        (acc, mod) => {
+            const prior = acc[mod.pageConfigType] || [];
+            acc[mod.pageConfigType] = Array.from(
+                new Set([...prior, ...mod.modules]),
+            );
+            return acc;
+        },
+        {} as { [key: string]: string[] },
+    );
+    const [finalSplits, commons] = splitter(splitByPageType);
+    const config = cleanShims(cleanURLs(requireConfig));
 
     const sharedModules = {
         name: 'bundles/shared',
-        // Cast to/from Set to kill duplicates
-        include: Array.from(new Set(commons)).filter(m => {
+        include: commons.filter(m => {
             // `r.js` gets mad if these are included
             // Haven't looked into _why_ quite yet
             // TODO: debug
@@ -92,21 +59,15 @@ export default function generate(
         create: true,
     };
 
-    const finalModules = modules
-        // Don't generate a bundle for pages
-        // that have no unique modules
-        .filter(mod => mod.modules.length)
-        .map(mod => ({
-            name: `bundles/${mod.pageConfigType}`,
+    const finalModules = Object.entries(finalSplits)
+        .filter(([_, modules]) => modules.length)
+        .map(([pageConfigType, modules]) => ({
+            name: `bundles/${pageConfigType}`,
             create: true,
-            include: mod.modules,
-            // Exclude any modules that are already
-            // found in the shared bundle
+            include: modules,
             exclude: ['bundles/shared'],
         }))
         .concat([sharedModules])
-        // Shared module needs to be first. If they are not,
-        // the `exclude` for `bundles/shared` won't work
         .reverse();
 
     return {
@@ -124,11 +85,57 @@ export default function generate(
         },
         paths: {
             ...config.paths,
-            // Config scraped from the page will have the
-            // `text` plugin pointed at the custom m2 runtime one.
-            // For bundling we need to use the one baked-in to RequireJS
             text: 'requirejs/text',
         },
         map: config.map,
+    };
+}
+
+/**
+ * Set any URL in `paths` and `map` to `empty:` to prevent r.js from blowing up.
+ * `requirejs-config.js` in m2 at runtime will set the correct path
+ */
+function cleanURLs(config: Readonly<RequireConfig>): RequireConfig {
+    const reHTTP = /^https?:\//;
+
+    const clean = (obj: { [key: string]: string }) =>
+        Object.entries(obj).reduce(
+            (acc, [path, location]) => {
+                const isHTTP = reHTTP.test(location);
+                acc[path] = isHTTP ? 'empty:' : location;
+                return acc;
+            },
+            {} as { [key: string]: string },
+        );
+
+    return {
+        ...config,
+        paths: clean(config.paths),
+        map: {
+            '*': clean(config.map['*']),
+        },
+    };
+}
+
+/**
+ * The RequireJS config scraped from the storefront has an
+ * unnecessary key 'exportsFn' for some modules, and 'exportsFn'
+ * will cause `r.js` to blow up. Removing the key
+ */
+function cleanShims(config: Readonly<RequireConfig>): RequireConfig {
+    return {
+        ...config,
+        shim: Object.entries(config.shim).reduce(
+            (acc, [shim, val]) => {
+                acc[shim] = val.hasOwnProperty('exportsFn')
+                    ? {
+                          // @ts-ignore: Type narrowing isn't working well here, and type guards are bulky
+                          exports: val.exports,
+                      }
+                    : val;
+                return acc;
+            },
+            {} as RequireConfig['shim'],
+        ),
     };
 }
