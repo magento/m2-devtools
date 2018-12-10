@@ -4,7 +4,7 @@
 
 _Note: This module is currently not consumable via composer. [Want to help?](https://github.com/magento/m2-devtools/issues/14)_
 
-Manually install the [`Magento_BundleConfig`](https://github.com/magento/m2-devtools/tree/master/Magento_BundleConfig) module from Github.
+Manually install the [`Magento_BundleConfig`](https://github.com/magento/m2-devtools/tree/master/Magento_BundleConfig) module from Github. Make sure you've run `setup:upgrade` and that the module is enabled.
 
 ## Set Store to Production Mode
 
@@ -20,7 +20,7 @@ You must have `node.js` installed locally. Run `npm install -g requirejs`
 
 ## Save the Generated Bundle Config
 
-Click `Copy to Clipboard` in the `Bundle Generator` tab. Save the entire configuration as `frontend/Magento/{your-theme}/{language}_source/build.js`. For example, if you're bundling Luma in English, it should be `frontend/Magento/luma/en_US_source/build.js`.
+Click `Copy to Clipboard` in the `Bundle Generator` tab. Save the entire configuration in a file called `build.js` in the root of your store.
 
 ## Run the RequireJS Optimizer
 
