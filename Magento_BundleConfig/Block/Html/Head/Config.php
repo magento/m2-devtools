@@ -6,48 +6,49 @@
 
 namespace Magento\BundleConfig\Block\Html\Head;
 
+use Magento\BundleConfig\Model\FileManager as BundleFileManager;
+use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\RequireJs\Config as RequireJsConfig;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\View\Element\Context as ViewElementContext;
+use Magento\Framework\View\Page\Config as PageConfig;
+use Magento\RequireJs\Model\FileManager;
 
 class Config extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
-     * @var RequireJsConfig
-     */
-    private $config;
-
-    /**
-     * @var \Magento\RequireJs\Model\FileManager
+     * @var FileManager
      */
     private $fileManager;
 
     /**
-     * @var \Magento\Framework\View\Page\Config
+     * @var PageConfig
      */
-    protected $pageConfig;
+    private $pageConfig;
 
     /**
-     * @var \Magento\Framework\View\Asset\ConfigInterface
+     * @var AppState 
      */
-    private $bundleConfig;
+    private $appState;
 
     /**
-     * @param \Magento\Framework\View\Element\Context $context
-     * @param RequireJsConfig $config
+     * @var DirectoryList
+     */
+    private $dir;
+
+    /**
+     * @param ViewElementContext $context
      * @param AppState $appState
-     * @param \Magento\BundleConfig\Model\FileManager $fileManager
-     * @param \Magento\Framework\View\Page\Config $pageConfig
-     * @param \Magento\Framework\View\Asset\ConfigInterface $bundleConfig
+     * @param BundleFileManager $fileManager
+     * @param PageConfig $pageConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Context $context,
-        RequireJsConfig $config,
+        ViewElementContext $context,
         AppState $appState,
-        \Magento\BundleConfig\Model\FileManager $fileManager,
-        \Magento\Framework\View\Page\Config $pageConfig,
-        \Magento\Framework\View\Asset\ConfigInterface $bundleConfig,
-        \Magento\Framework\Filesystem\DirectoryList $dir,
+        BundleFileManager $fileManager,
+        PageConfig $pageConfig,
+        DirectoryList $dir,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -60,11 +61,11 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     /**
      * Include specified AMD bundle as an asset on the page
      *
-     * @return $this
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
-        if ($this->appState->getMode() == AppState::MODE_DEVELOPER) {
+        if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
             return parent::_prepareLayout();
         }
 
