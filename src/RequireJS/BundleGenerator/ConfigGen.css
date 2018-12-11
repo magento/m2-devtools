@@ -27,7 +27,8 @@
 }
 
 .instructionsWrapper {
-    height: calc(100% - 65px);
+    height: 100%;
+    overflow: auto;
 }
 
 .instructions :global(h1) {

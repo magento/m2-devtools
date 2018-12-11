@@ -2,3 +2,6 @@
 node_modules
 npm-debug.log
 extension/dist
+
+# Ignore IDE config folders
+.idea
