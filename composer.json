@@ -1,0 +1,23 @@
+{
+    "name": "magento/module-bundle-config",
+    "description": "Backend extension to the helpful in-browser debugging/inspection tools for the Magento 2 Front-End",
+    "require": {
+        "php": "^7.1.0|^7.2.0",
+        "magento/framework": "^100.0.20|^101.0.0|^102.0.0"
+    },
+    "suggest": {
+        "magento/module-require-js": "^100.1.0"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3"
+    ],
+    "autoload": {
+        "files": [
+            "Magento_BundleConfig/registration.php"
+        ],
+        "psr-4": {
+            "Magento\\BundleConfig\\": "Magento_BundleConfig"
+        }
+    }
+}
