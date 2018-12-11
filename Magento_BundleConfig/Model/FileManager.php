@@ -1,27 +1,30 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\BundleConfig\Model;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\App\State as AppState;
-use Magento\Framework\RequireJs\Config;
+use Magento\Framework\View\Asset\File\FallbackContext as FileFallbackContext;
+use Magento\Framework\View\Asset\Repository as AssetRepository;
 
 class FileManager
 {
     /**
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var AssetRepository
      */
     private $assetRepo;
 
     /**
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @var FileFallbackContext 
      */
-    public function __construct(
-        \Magento\Framework\View\Asset\Repository $assetRepo
-    ) {
+    private $staticContext;
+
+    /**
+     * @param AssetRepository $assetRepo
+     */
+    public function __construct(AssetRepository $assetRepo)
+    {
         $this->assetRepo = $assetRepo;
         $this->staticContext = $assetRepo->getStaticViewFileContext();
     }

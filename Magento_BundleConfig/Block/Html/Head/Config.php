@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -6,49 +6,56 @@
 
 namespace Magento\BundleConfig\Block\Html\Head;
 
+use Magento\BundleConfig\Model\FileManager as BundleFileManager;
+use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\RequireJs\Config as RequireJsConfig;
 use Magento\Framework\App\State as AppState;
-use Magento\Framework\View\Asset\Minification;
+use Magento\Framework\View\Element\Context as ViewElementContext;
+use Magento\Framework\View\Page\Config as PageConfig;
+use Magento\RequireJs\Model\FileManager;
 
 class Config extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
-     * @var RequireJsConfig
-     */
-    private $config;
-
-    /**
-     * @var \Magento\RequireJs\Model\FileManager
+     * @var FileManager
      */
     private $fileManager;
 
     /**
-     * @var \Magento\Framework\View\Page\Config
+     * @var PageConfig
      */
-    protected $pageConfig;
+    private $pageConfig;
 
     /**
-     * @var \Magento\Framework\View\Asset\ConfigInterface
+     * @var AppState 
      */
-    private $bundleConfig;
+    private $appState;
 
     /**
-     * @param \Magento\Framework\View\Element\Context $context
-     * @param RequireJsConfig $config
+     * @var DirectoryList
+     */
+    private $dir;
+
+    /**
+     * @var HttpRequest
+     */
+    private $httpRequest;
+
+    /**
+     * @param ViewElementContext $context
      * @param AppState $appState
-     * @param \Magento\BundleConfig\Model\FileManager $fileManager
-     * @param \Magento\Framework\View\Page\Config $pageConfig
-     * @param \Magento\Framework\View\Asset\ConfigInterface $bundleConfig
+     * @param BundleFileManager $fileManager
+     * @param PageConfig $pageConfig
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Element\Context $context,
-        RequireJsConfig $config,
+        ViewElementContext $context,
         AppState $appState,
-        \Magento\BundleConfig\Model\FileManager $fileManager,
-        \Magento\Framework\View\Page\Config $pageConfig,
-        \Magento\Framework\View\Asset\ConfigInterface $bundleConfig,
-        \Magento\Framework\Filesystem\DirectoryList $dir,
+        BundleFileManager $fileManager,
+        PageConfig $pageConfig,
+        DirectoryList $dir,
+        HttpRequest $httpRequest,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -56,21 +63,22 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         $this->pageConfig = $pageConfig;
         $this->appState = $appState;
         $this->dir = $dir;
+        $this->httpRequest = $httpRequest;
     }
 
     /**
      * Include specified AMD bundle as an asset on the page
      *
-     * @return $this
+     * @return \Magento\Framework\View\Element\AbstractBlock
      */
     protected function _prepareLayout()
     {
-        if ($this->appState->getMode() == AppState::MODE_DEVELOPER) {
+        if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
             return parent::_prepareLayout();
         }
 
         $staticDir = $this->dir->getPath('static');
-        $fullActionName = $this->getRequest()->getFullActionName();
+        $fullActionName = $this->httpRequest->getFullActionName();
 
         $assetCollection = $this->pageConfig->getAssetCollection();
 
