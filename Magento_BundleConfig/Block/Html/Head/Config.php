@@ -7,6 +7,7 @@
 namespace Magento\BundleConfig\Block\Html\Head;
 
 use Magento\BundleConfig\Model\FileManager as BundleFileManager;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Filesystem\DirectoryList;
 use Magento\Framework\RequireJs\Config as RequireJsConfig;
 use Magento\Framework\App\State as AppState;
@@ -37,6 +38,11 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
     private $dir;
 
     /**
+     * @var HttpRequest
+     */
+    private $httpRequest;
+
+    /**
      * @param ViewElementContext $context
      * @param AppState $appState
      * @param BundleFileManager $fileManager
@@ -49,6 +55,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         BundleFileManager $fileManager,
         PageConfig $pageConfig,
         DirectoryList $dir,
+        HttpRequest $httpRequest,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -56,6 +63,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         $this->pageConfig = $pageConfig;
         $this->appState = $appState;
         $this->dir = $dir;
+        $this->httpRequest = $httpRequest;
     }
 
     /**
@@ -70,7 +78,7 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         }
 
         $staticDir = $this->dir->getPath('static');
-        $fullActionName = $this->getRequest()->getFullActionName();
+        $fullActionName = $this->httpRequest->getFullActionName();
 
         $assetCollection = $this->pageConfig->getAssetCollection();
 
