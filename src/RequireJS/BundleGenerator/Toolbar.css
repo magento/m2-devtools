@@ -9,7 +9,6 @@
     border-bottom: 1px solid rgb(208, 208, 208);
     display: flex;
     align-items: center;
-    position: sticky;
     top: 31px;
     user-select: none;
 }

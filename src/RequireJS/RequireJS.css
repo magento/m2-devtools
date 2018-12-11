@@ -6,3 +6,7 @@
 .tabWrapper[data-selected='false'] {
     display: none;
 }
+
+.tabWrapper {
+    overflow: hidden;
+}
