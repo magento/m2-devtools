@@ -8,7 +8,6 @@ namespace Magento\BundleConfig\Block\Html\Head;
 
 use Magento\Framework\RequireJs\Config as RequireJsConfig;
 use Magento\Framework\App\State as AppState;
-use Magento\Framework\View\Asset\Minification;
 
 class Config extends \Magento\Framework\View\Element\AbstractBlock
 {
