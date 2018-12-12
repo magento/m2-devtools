@@ -5,6 +5,7 @@
 
 .wrapper {
     display: flex;
+    background-color: #fff;
 }
 
 .rightPanelItemWrapper[data-selected='false'] {
