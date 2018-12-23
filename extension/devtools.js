@@ -34,9 +34,15 @@ function onPanelShown(panel) {
     });
 }
 
+/**
+ * Needs to handle
+ *  - Stores with signing of static files disabled
+ *  - Stores with the RequireJS head block moved to the body
+ *  - Stores with Magento's built-in minification enabled
+ */
 function isMagento2Store() {
-    const reRequireScript = /\/static\/version\d+\/frontend\/.+\/.+\/requirejs\/require(?:\.min)?\.js/;
-    const scripts = Array.from(document.querySelectorAll('head > script[src]') || []);
+    const reRequireScript = /\/static(?:\/version\d+)?\/frontend\/.+\/.+\/requirejs\/require(?:\.min)?\.js/;
+    const scripts = Array.from(document.querySelectorAll('script[src]') || []);
     return scripts.some(s => reRequireScript.test(s.src));
 }
 
