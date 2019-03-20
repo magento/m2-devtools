@@ -12,7 +12,7 @@ const globPromise = promisify(glob);
 const readFilePromise = promisify(readFile);
 
 (async () => {
-    const filePaths = await globPromise('**/*.{js,ts,html}', {
+    const filePaths = await globPromise('**/*.{js,ts,html,php,xml}', {
         ignore: ['node_modules/**', 'extension/dist/**'],
     });
 

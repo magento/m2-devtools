@@ -30,20 +30,20 @@ function createPanelIfMagento2() {
 
 function onPanelShown(panel) {
     panel.onShown.addListener(window => {
-        //
+        // If this listener isn't attached, Chrome won't create tha tab
     });
 }
 
-// Stringified and run in the context of the inspected page.
-// Cannot reference outer scope vars
+/**
+ * Needs to handle
+ *  - Stores with signing of static files disabled
+ *  - Stores with the RequireJS head block moved to the body
+ *  - Stores with Magento's built-in minification enabled
+ */
 function isMagento2Store() {
-    const magentoClasses = [
-        '.page-layout-1column',
-        '.page-layout-2columns-left',
-        '.page-layout-checkout'
-    ];
-    // TODO: Find a more foolproof way to determine if a page is an m2 store
-    return magentoClasses.some(document.querySelector.bind(document));
+    const reRequireScript = /\/static(?:\/version\d+)?\/frontend\/.+\/.+\/requirejs\/require(?:\.min)?\.js/;
+    const scripts = Array.from(document.querySelectorAll('script[src]') || []);
+    return scripts.some(s => reRequireScript.test(s.src));
 }
 
 chrome.devtools.network.onNavigated.addListener(function() {
