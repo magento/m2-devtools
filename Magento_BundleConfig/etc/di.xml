@@ -9,4 +9,9 @@
     <type name="Magento\Framework\View\Asset\Minification">
         <plugin name="bundle_config_minification_plugin" type="Magento\BundleConfig\Plugin\View\Asset\MinificationPlugin" />
     </type>
+    <type name="Magento\BundleConfig\ViewModel\SharedBundle">
+        <arguments>
+            <argument name="filePath" xsi:type="string">bundles/shared.js</argument>
+        </arguments>
+    </type>
 </config>

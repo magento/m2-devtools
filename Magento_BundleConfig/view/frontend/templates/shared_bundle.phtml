@@ -1,0 +1,13 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\BundleConfig\ViewModel\SharedBundle $viewModel */
+$viewModel = $block->getData('sharedBundleViewModel');
+if (!$viewModel->isDeveloperModeEnabled() && $viewModel->fileExists()) {
+    ?>
+    <script type="text/javascript" src="<?= /* @noEscape */$viewModel->getSharedBundleUrl() ?>"></script>
+    <?php
+}
