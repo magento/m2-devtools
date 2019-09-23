@@ -1,0 +1,13 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\BundleConfig\ViewModel\PageSpecificBundle $viewModel */
+$viewModel = $block->getData('pageSpecificBundleViewModel');
+if (!$viewModel->isDeveloperModeEnabled() && $viewModel->fileExists()) {
+    ?>
+    <script type="text/javascript" src="<?= /* @noEscape */$viewModel->getPageSpecificBundleUrl() ?>"></script>
+    <?php
+}
