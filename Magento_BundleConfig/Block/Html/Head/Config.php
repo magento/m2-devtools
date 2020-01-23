@@ -87,10 +87,9 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock
         $sharedBundleAbsPath = $staticDir . "/" . $sharedBundleRelPath;
 
         if (file_exists($sharedBundleAbsPath)) {
-            $assetCollection->insert(
+            $assetCollection->add(
                 $sharedBundleRelPath,
-                $shared,
-                RequireJsConfig::REQUIRE_JS_FILE_NAME
+                $shared
             );
         }
 
