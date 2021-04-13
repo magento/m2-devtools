@@ -1,0 +1,21 @@
+{
+    "name": "magento/module-bundle-config",
+    "description": "Magento module helping with generating bundles requirejs configuration using chrome extension m2-devtools",
+    "type": "magento2-module",
+    "require": {
+      "magento/framework": "*"
+    },
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\BundleConfig\\": ""
+        }
+    },
+    "version": "0.0.1"
+}
